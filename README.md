@@ -2,7 +2,7 @@ This is a short trial of the Retrieval-Augmented Generation (RAG) method with a 
 
 Based on the following readily available components:
 * [GPT4All](https://www.nomic.ai/gpt4all)
-* [Langchain wrappered Unstructured PDF processing][https://unstructured.io/]
+* [Langchain wrappered Unstructured PDF processing](https://unstructured.io/)
 * [ChromaDB](https://www.trychroma.com/)
 * Embeddings from Nomic and/or GPT4ALL
 
