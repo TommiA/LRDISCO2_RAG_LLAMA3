@@ -34,14 +34,6 @@ def split_doc(data):
     all_splits = text_splitter.split_documents(data)
     return all_splits
 
-def get_embeddings(docs):
-    #embedder = Embed4All(device='kompute:NVIDIA GeForce RTX 3060')
-    #embedded_chunks = [embedder.embed(doc.page_content) for doc in docs]
-    #embeddings = embed.text(all_texts, inference_mode="local")['embeddings']
-    
-    embedder = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return [embedder.embed_documents(doc.page_content) for doc in docs] 
-
 def store_basic_docs(docs):
     #Separately store basic1 docs with their basic chroma embedding to play around with more serious ones..
     collection = client.create_collection(name="LR_Disco_2_docs")
@@ -50,6 +42,22 @@ def store_basic_docs(docs):
             documents = [doc.page_content],
             ids=[str(idx)]
         )
+
+def hf_embed_and_store(client):
+    #Retrieve stored docs and try alternative embeddings
+    doc_collection = client.get_collection(name="LR_Disco_2_docs")
+    _ids = doc_collection.get()['ids']
+    _docs = doc_collection.get()['documents']
+    #HuggingFaceEmbeddings embedding
+    embedder = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = [embedder.embed_documents(doc.page_content) for doc in docs] 
+    #Store to nomic embedding specific collection
+    hf_collection = client.create_collection(name="LR_Disco_2_hf")
+    hf_collection.add(
+        embeddings = embeddings,
+        documents = _docs,
+        ids=_ids
+    )
 
 def nomic_embed_and_store(client):
     #Retrieve stored docs and try alternative embeddings
@@ -71,8 +79,8 @@ def embed4all_embed_and_store(client):
     doc_collection = client.get_collection(name="LR_Disco_2_docs")
     _ids = doc_collection.get()['ids']
     _docs = doc_collection.get()['documents']
-    #Nomic embedding
-    embedder = Embed4All(device='kompute:NVIDIA GeForce RTX 3060')
+    #Embed4All embedding
+    embedder = Embed4All(device='gpu')
     embedded_chunks = [embedder.embed(doc) for doc in _docs]
     #Store to nomic embedding specific collection
     embed4all_collection = client.create_collection(name="LR_Disco_2_embed4all")
