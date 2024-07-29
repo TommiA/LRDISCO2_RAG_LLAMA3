@@ -12,6 +12,10 @@ def query_collection(query_text):
     results_text = ""
     for res in results['documents'][0]:
         results_text += res
+    if args.debug:
+        print("DEBUG: Chroma DB retrieval results:")
+        print(results['documents'][0])
+        print(results['distances'][0])
     return results_text
 
 def process_query(input_prompt, context):
