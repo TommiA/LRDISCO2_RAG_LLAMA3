@@ -1,4 +1,6 @@
-This is a short trial of the Retrieval-Augmented Generation (RAG) method with a quantized version of the LLAMA 3 8B Large Language Model. The retrieval is performed using the Chroma vector database, which stores parts of the document and their respective embeddings from the Land Rover Discovery II maintenance manual (not included in this repository). I.e. this solution is supposed to have some sort of the knowledge of the Land Rover Discovery II models and their maintenance. Queries can be about the Discovery II and its maintenance can be done with [this simple python script](query_chroma_db_and_llama.py)
+This is an intersectional combination of Artificial Intelligence (AI) and specificly Large Language Models (LLM), Natural Language Processing, PDFs, Land Rovers and car maintenance..a rainy day summer project for fun.
+
+I.e. this is a short trial of the Retrieval-Augmented Generation (RAG) method with a quantized version of the LLAMA 3 8B Large Language Model. The retrieval is performed using the Chroma vector database, which stores parts of the document and their respective embeddings from the Land Rover Discovery II maintenance manual (not included in this repository). I.e. this solution is supposed to have some sort of the knowledge of the Land Rover Discovery II models and their maintenance. Queries can be about the Discovery II and its maintenance can be done with [this simple python script](query_chroma_db_and_llama.py)
 
 Based on the following readily available components:
 * [GPT4All](https://www.nomic.ai/gpt4all)
