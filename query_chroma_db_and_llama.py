@@ -27,8 +27,9 @@ def process_query(input_prompt, context):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--prompt", help = "User prompt about Land Rover Discovery II and its maintenance")
-parser.add_argument("-g", "--gpu", help = "Try GPU if available")
+parser.add_argument("-g", "--gpu", action='store_true', help = "Try GPU if available")
 parser.add_argument("-d", "--debug", action='store_true', help='Enable the debug output')
+parser.add_argument("-i", "--interactive", action='store_true', help='Enable interactive chat mode')
 args = parser.parse_args()
 
 if args.prompt:
@@ -49,6 +50,18 @@ collection = client.get_collection("LR_Disco_2_embed4all")
 #from nomic import embed
 #collection = client.get_collection("LR_Disco_2_nomic")
 
-context = query_collection(input_prompt)
-res = process_query(input_prompt, context)
-print(res)
+if args.interactive:
+    while True:
+        input_prompt = input("Ask about Land Rover Discovery 2 (or exit to quit): ")
+        
+        if input_prompt.lower() == 'exit':
+            print("Exiting the interactive prompt. Goodbye!")
+            break
+        else:
+            context = query_collection(input_prompt)
+            res = process_query(input_prompt, context)
+            print(res)
+else:
+    context = query_collection(input_prompt)
+    res = process_query(input_prompt, context)
+    print(res)

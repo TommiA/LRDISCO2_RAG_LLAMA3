@@ -24,6 +24,26 @@ According to the provided context, the firing order for the 2.5 litre in-line di
 
 1 - 2 - 4 - 5 - 3
 ```
+-
+```
+C:\Users\tai\Documents\kikkailuja\LRDISCO2_RAG_LLAMA3>python query_chroma_db_and_llama.py -p "Tell me how to adjust front door hinges in land rover discovery 2"
+To adjust the front door hinges on a Land Rover Discovery 2, follow these steps:
+
+1. Open the door and place a wooden block under it using the jack.
+2. Loosen the four bolts securing the hinges to the door by turning them counterclockwise.
+3. Use the jack to assist with door alignment while you make adjustments.
+
+Once the adjustment is correct:
+
+4. Tighten the hinge bolts in a star pattern (tightening one bolt, then moving to the next) until they reach 30 Nm (22 lbf-ft).
+5. Remove the jack and close the door.
+6. Check for correct alignment by ensuring the door fits flush with adjacent panels and has an equal gap at the edges.
+
+Remember to adjust the door latch striker as well:
+
+7. Loosen the two Torx bolts securing the door latch striker, then tighten them in a star pattern until they reach 26 Nm (19 lbf-ft).
+```
+
 Or just some opinnions :D
 ```
 C:\Users\tai\Documents\kikkailuja\LRDISCO2_RAG_LLAMA3>python query_chroma_db_and_llama.py -p "Why is land rover discovery 2 better than its modern counter parts?"
