@@ -90,7 +90,7 @@ docker build -t lrdisco2-rag-llama3 .
 Run the image with a prompt:
 
 ```bash
-docker run --rm lrdisco2-rag-llama3 -p "Tell me what is the firing order of the Td5 engine"
+docker run --rm lrdisco2-rag-llama3 -p "Tell me what is the firing order of the Land Rover Td5 diesel engine"
 ```
 
 Run interactively:
