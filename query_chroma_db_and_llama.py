@@ -37,7 +37,7 @@ if args.prompt:
 else:
     input_prompt = "Tell me briefly about land rover discovery 2 model"
 
-m_device = "gpu"
+m_device = "cpu"
 if args.gpu:
     if len(GPT4All.list_gpus()[0]) > 0:
         m_device = GPT4All.list_gpus()[0]
