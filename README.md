@@ -55,6 +55,52 @@ Based on the workshop manual, I can provide some insights on why the Land Rover 
 
 Of course, this is just based on general information from the workshop manual, and opinions may vary depending on individual experiences and preferences.
 ```
+
+# Usage
+
+## query_chroma_db_and_llama.py switches
+
+The main script supports the following command-line options:
+
+* `-p`, `--prompt` : custom user prompt text
+* `-g`, `--gpu` : try to use a GPU if one is available
+* `-d`, `--debug` : enable debug output for the Chroma retrieval
+* `-i`, `--interactive` : start an interactive chat loop
+
+Example:
+
+```bash
+python query_chroma_db_and_llama.py -p "Tell me the firing order of the Td5 engine" -g
+```
+
+Run interactively:
+
+```bash
+python query_chroma_db_and_llama.py -i
+```
+
+## Build and run with Docker
+
+Build the container image:
+
+```bash
+docker build -t lrdisco2-rag-llama3 .
+```
+
+Run the image with a prompt:
+
+```bash
+docker run --rm lrdisco2-rag-llama3 -p "Tell me what is the firing order of the Td5 engine"
+```
+
+Run interactively:
+
+```bash
+docker run --rm -it lrdisco2-rag-llama3 -i
+```
+
+If you need GPU support, add your GPU runtime flags and use `-g` as well.
+
 # Wishlist:
 * Fancy web ui
 * Improved PDF content capturing including tables (as HTML?) and maybe even images
