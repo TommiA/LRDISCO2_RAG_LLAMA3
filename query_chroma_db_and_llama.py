@@ -25,43 +25,56 @@ def process_query(input_prompt, context):
         formatted_prompt = f"{system_prompt}\n\nUser: {user_prompt}\n\nAssistant:"
         return model.generate(formatted_prompt, max_tokens=1024)
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-p", "--prompt", help = "User prompt about Land Rover Discovery II and its maintenance")
-parser.add_argument("-g", "--gpu", action='store_true', help = "Try GPU if available")
-parser.add_argument("-d", "--debug", action='store_true', help='Enable the debug output')
-parser.add_argument("-i", "--interactive", action='store_true', help='Enable interactive chat mode')
-args = parser.parse_args()
+args = argparse.Namespace(prompt=None, gpu=False, debug=False, interactive=False)
+model = None
+client = None
+embedder = None
+collection = None
 
-if args.prompt:
-    input_prompt = args.prompt
-else:
-    input_prompt = "Tell me briefly about land rover discovery 2 model"
 
-m_device = "cpu"
-if args.gpu:
-    if len(GPT4All.list_gpus()[0]) > 0:
-        m_device = GPT4All.list_gpus()[0]
+def get_device(args):
+    m_device = "cpu"
+    if args.gpu:
+        if len(GPT4All.list_gpus()[0]) > 0:
+            m_device = GPT4All.list_gpus()[0]
+    return m_device
 
-model = GPT4All("Meta-Llama-3-8B-Instruct.Q4_0.gguf", device=m_device)
-client = chromadb.PersistentClient(path="data/db/")
 
-embedder = Embed4All()
-collection = client.get_collection("LR_Disco_2_embed4all")
-#from nomic import embed
-#collection = client.get_collection("LR_Disco_2_nomic")
+def main(argv=None):
+    global args, model, client, embedder, collection
 
-if args.interactive:
-    while True:
-        input_prompt = input("Ask about Land Rover Discovery 2 (or exit to quit): ")
-        
-        if input_prompt.lower() == 'exit':
-            print("Exiting the interactive prompt. Goodbye!")
-            break
-        else:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--prompt", help = "User prompt about Land Rover Discovery II and its maintenance")
+    parser.add_argument("-g", "--gpu", action='store_true', help = "Try GPU if available")
+    parser.add_argument("-d", "--debug", action='store_true', help='Enable the debug output')
+    parser.add_argument("-i", "--interactive", action='store_true', help='Enable interactive chat mode')
+    args = parser.parse_args(argv)
+
+    if args.prompt:
+        input_prompt = args.prompt
+    else:
+        input_prompt = "Tell me briefly about land rover discovery 2 model"
+
+    m_device = get_device(args)
+    model = GPT4All("Meta-Llama-3-8B-Instruct.Q4_0.gguf", device=m_device)
+    client = chromadb.PersistentClient(path="data/db/")
+    embedder = Embed4All()
+    collection = client.get_collection("LR_Disco_2_embed4all")
+
+    if args.interactive:
+        while True:
+            input_prompt = input("Ask about Land Rover Discovery 2 (or exit to quit): ")
+            if input_prompt.lower() == 'exit':
+                print("Exiting the interactive prompt. Goodbye!")
+                break
             context = query_collection(input_prompt)
             res = process_query(input_prompt, context)
             print(res)
-else:
-    context = query_collection(input_prompt)
-    res = process_query(input_prompt, context)
-    print(res)
+    else:
+        context = query_collection(input_prompt)
+        res = process_query(input_prompt, context)
+        print(res)
+
+
+if __name__ == "__main__":
+    main()

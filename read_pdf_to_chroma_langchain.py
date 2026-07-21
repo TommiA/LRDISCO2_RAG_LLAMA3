@@ -50,7 +50,7 @@ def hf_embed_and_store(client):
     _docs = doc_collection.get()['documents']
     #HuggingFaceEmbeddings embedding
     embedder = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    embeddings = [embedder.embed_documents(doc.page_content) for doc in docs] 
+    embeddings = [embedder.embed_documents(doc) for doc in _docs]
     #Store to nomic embedding specific collection
     hf_collection = client.create_collection(name="LR_Disco_2_hf")
     hf_collection.add(
@@ -90,10 +90,18 @@ def embed4all_embed_and_store(client):
         ids=_ids
     )
 
-data = read_pdf_unstructured_lib()
-docs = split_doc(data)
+client = None
 
-client = chromadb.PersistentClient(path="data/db/")
-store_basic_docs(docs)
 
-nomic_embed_and_store(client)
+def main():
+    global client
+
+    data = read_pdf_unstructured_lib()
+    docs = split_doc(data)
+    client = chromadb.PersistentClient(path="data/db/")
+    store_basic_docs(docs)
+    nomic_embed_and_store(client)
+
+
+if __name__ == "__main__":
+    main()
