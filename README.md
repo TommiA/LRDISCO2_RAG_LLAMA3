@@ -11,6 +11,8 @@ Based on the following readily available components:
 # Moving parts:
   * [read_pdf_to_chroma_langchain.py](read_pdf_to_chroma_langchain.py) Preprocesses the input PDF file located in the data/pdf folder, divides it to chunks of text and does embedding, finally stores it to the Chroma DB
   * [query_chroma_db_and_llama.py](query_chroma_db_and_llama.py) loads the LLAMA 3 model, formats the user prompts with the retrieved augmentation part from the Chroma DB and finally invokes the model to generate output
+  * [backend/api.py](backend/api.py) provides a FastAPI backend for the browser-based web UI
+  * [frontend/index.html](frontend/index.html), [frontend/app.js](frontend/app.js), [frontend/styles.css](frontend/styles.css) implement the web UI and query interface
 
 The default prompt is "Tell me briefly about land rover discovery 2 model"
 ```
@@ -79,6 +81,22 @@ Run interactively:
 python query_chroma_db_and_llama.py -i
 ```
 
+## Web UI
+
+You can run the web interface locally with the FastAPI backend:
+
+```bash
+python -m uvicorn backend.api:app --host 0.0.0.0 --port 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+The browser UI sends queries to `/api/query` and displays the generated answer plus retrieved context.
+
 ## Build and run with Docker
 
 Build the container image:
@@ -87,20 +105,19 @@ Build the container image:
 docker build -t lrdisco2-rag-llama3 .
 ```
 
-Run the image with a prompt:
+Run the web UI container:
 
 ```bash
-docker run --rm lrdisco2-rag-llama3 -p "Tell me what is the firing order of the Land Rover Td5 diesel engine"
+docker run --rm -p 8000:8000 lrdisco2-rag-llama3
 ```
 
-Run interactively:
+Then open:
 
-```bash
-docker run --rm -it lrdisco2-rag-llama3 -i
+```text
+http://localhost:8000
 ```
 
 If you need GPU support, add your GPU runtime flags and use `-g` as well.
 
 # Wishlist:
-* Fancy web ui
 * Improved PDF content capturing including tables (as HTML?) and maybe even images

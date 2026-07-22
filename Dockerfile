@@ -1,10 +1,7 @@
 FROM python:3.11
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends     build-essential     git     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
 WORKDIR /app
@@ -18,8 +15,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make the script executable
 RUN chmod +x query_chroma_db_and_llama.py
 
-# Expose port if needed (e.g., for web UI)
-# EXPOSE 8000
+# Expose port for the web UI
+EXPOSE 8000
 
-# Define the entrypoint to run the application and forward runtime CLI switches
-ENTRYPOINT ["python", "query_chroma_db_and_llama.py"]
+# Define default model and database paths. Override with runtime environment variables if needed.
+ENV LLAMA_MODEL_PATH=/app/Meta-Llama-3-8B-Instruct.Q4_0.gguf
+ENV CHROMA_DB_PATH=/app/data/db/
+
+# Start the FastAPI backend and serve the frontend
+CMD ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]
