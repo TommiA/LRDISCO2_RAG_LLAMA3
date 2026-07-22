@@ -18,8 +18,7 @@ RUN chmod +x query_chroma_db_and_llama.py
 # Expose port for the web UI
 EXPOSE 8000
 
-# Define default model and database paths. Override with runtime environment variables if needed.
-ENV LLAMA_MODEL_PATH=/app/Meta-Llama-3-8B-Instruct.Q4_0.gguf
+# Define default database path. Model name is hardcoded in the application.
 ENV CHROMA_DB_PATH=/app/data/db/
 
 # Start the FastAPI backend and serve the frontend

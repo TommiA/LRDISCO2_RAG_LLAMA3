@@ -35,8 +35,7 @@ def process_query(input_prompt, context):
 def load_resources(model_path=None, db_path=None, gpu=False):
     global model, client, embedder, collection
 
-    if model_path is None:
-        model_path = os.environ.get("LLAMA_MODEL_PATH", "Meta-Llama-3-8B-Instruct.Q4_0.gguf")
+    model_name = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
     if db_path is None:
         db_path = os.environ.get("CHROMA_DB_PATH", "data/db/")
 
@@ -51,7 +50,7 @@ def load_resources(model_path=None, db_path=None, gpu=False):
             print(f"Details: {exc}")
             device = "cpu"
 
-    model = GPT4All(model_path, device=device)
+    model = GPT4All(model_name, device=device)
     client = chromadb.PersistentClient(path=db_path)
     embedder = Embed4All()
     collection = client.get_collection("LR_Disco_2_embed4all")
