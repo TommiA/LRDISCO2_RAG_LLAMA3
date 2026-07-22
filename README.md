@@ -112,6 +112,8 @@ Run the web UI container:
 docker run --rm -p 8000:8000 lrdisco2-rag-llama3
 ```
 
+> Note: Docker deployments initialize the GPT4All backend with `gpu=False` to avoid GPU startup issues. This means inference runs on CPU and may be noticeably slower than a GPU-backed setup.
+
 Then open:
 
 ```text
