@@ -14,25 +14,36 @@
       </header>
 
       <main>
+        <div class="intro-card">
+          <p>Type a question about Land Rover Discovery II repair, maintenance, wiring, or documentation and get a concise answer from the RAG knowledge base.</p>
+        </div>
+
         <label for="prompt">Question</label>
         <textarea id="prompt" rows="4" placeholder="Enter your question here..."></textarea>
 
         <div class="controls">
-          <label><input type="checkbox" id="debug" /> Show debug context</label>
-          <button id="submit">Ask</button>
-          <span id="status" class="status">Ready</span>
+          <label class="checkbox-label"><input type="checkbox" id="debug" /> Show debug context</label>
+          <div class="action-group">
+            <span id="status" class="status">Ready</span>
+            <button id="submit">Ask</button>
+          </div>
         </div>
 
-        <section class="response-card">
-          <h2>Answer</h2>
-          <pre id="answer">Awaiting query...</pre>
-        </section>
+        <div class="response-grid">
+          <section class="response-card">
+            <h2>Answer</h2>
+            <pre id="answer">Awaiting query...</pre>
+          </section>
 
-        <section class="response-card">
-          <h2>Retrieved Context</h2>
-          <pre id="context">Context will appear here once available.</pre>
-        </section>
+          <section class="response-card">
+            <h2>Retrieved Context</h2>
+            <pre id="context">Context will appear here once available.</pre>
+          </section>
+        </div>
       </main>
+      <footer class="footer">
+        <p>Powered by GPT4All, ChromaDB, and Land Rover Discovery II documentation.</p>
+      </footer>
     </div>
     <script src="/static/app.js"></script>
   </body>

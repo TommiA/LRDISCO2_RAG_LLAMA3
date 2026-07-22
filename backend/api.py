@@ -18,7 +18,11 @@ app.add_middleware(
 )
 
 frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
-app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
+
+@app.get("/", response_class=FileResponse)
+async def read_index():
+    return FileResponse(frontend_dir / "index.html")
 
 class QueryRequest(BaseModel):
     prompt: str
