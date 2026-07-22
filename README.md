@@ -84,6 +84,8 @@ If you need GPU support, add your GPU runtime flags and use `-g` as well.
 
 ## Web UI
 
+> Note: Web UI deployments initialize the GPT4All backend with `gpu=False` to avoid GPU startup issues. This means inference runs on CPU and may be noticeably slower than a GPU-backed setup.
+
 You can run the web interface locally with the FastAPI backend:
 
 ```bash
@@ -111,8 +113,6 @@ Run the web UI container:
 ```bash
 docker run --rm -p 8000:8000 lrdisco2-rag-llama3
 ```
-
-> Note: Docker deployments initialize the GPT4All backend with `gpu=False` to avoid GPU startup issues. This means inference runs on CPU and may be noticeably slower than a GPU-backed setup.
 
 Then open:
 
