@@ -42,9 +42,14 @@ def load_resources(model_path=None, db_path=None, gpu=False):
 
     device = "cpu"
     if gpu:
-        gpu_list = GPT4All.list_gpus()
-        if len(gpu_list) > 0:
-            device = gpu_list[0]
+        try:
+            gpu_list = GPT4All.list_gpus() or []
+            if gpu_list:
+                device = gpu_list[0]
+        except Exception as exc:
+            print("WARNING: GPU detection failed, falling back to CPU.")
+            print(f"Details: {exc}")
+            device = "cpu"
 
     model = GPT4All(model_path, device=device)
     client = chromadb.PersistentClient(path=db_path)

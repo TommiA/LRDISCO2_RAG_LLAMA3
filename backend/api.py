@@ -18,11 +18,7 @@ app.add_middleware(
 )
 
 frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
-app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
-
-@app.get("/")
-async def root():
-    return FileResponse(frontend_dir / "index.html")
+app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
 class QueryRequest(BaseModel):
     prompt: str
@@ -36,18 +32,7 @@ class QueryResponse(BaseModel):
 async def startup_event():
     model_path = Path(os.environ.get("LLAMA_MODEL_PATH", "Meta-Llama-3-8B-Instruct.Q4_0.gguf"))
     db_path = Path(os.environ.get("CHROMA_DB_PATH", "data/db/"))
-    '''
-    if not model_path.exists():
-        raise FileNotFoundError(
-            f"LLAMA model file not found: {model_path}. "
-            "Set LLAMA_MODEL_PATH to the correct .gguf file location or place the file in the app directory."
-        )
-    if not db_path.exists():
-        raise FileNotFoundError(
-            f"Chroma DB path not found: {db_path}. "
-            "Set CHROMA_DB_PATH to the correct database folder."
-        )
-    '''
+
     query_module.load_resources(model_path=str(model_path), db_path=str(db_path), gpu=True)
 
 @app.post("/api/query", response_model=QueryResponse)
