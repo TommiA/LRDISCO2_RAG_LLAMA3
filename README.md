@@ -80,6 +80,7 @@ Run interactively:
 ```bash
 python query_chroma_db_and_llama.py -i
 ```
+If you need GPU support, add your GPU runtime flags and use `-g` as well.
 
 ## Web UI
 
@@ -116,8 +117,6 @@ Then open:
 ```text
 http://localhost:8000
 ```
-
-If you need GPU support, add your GPU runtime flags and use `-g` as well.
 
 # Wishlist:
 * Improved PDF content capturing including tables (as HTML?) and maybe even images
