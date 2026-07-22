@@ -114,7 +114,7 @@ Run the web UI container:
 docker run --rm -p 8000:8000 lrdisco2-rag-llama3
 ```
 
-Then open:
+Then browse to:
 
 ```text
 http://localhost:8000
