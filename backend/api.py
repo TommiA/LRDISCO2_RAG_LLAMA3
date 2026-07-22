@@ -33,7 +33,7 @@ async def startup_event():
     model_path = Path(os.environ.get("LLAMA_MODEL_PATH", "Meta-Llama-3-8B-Instruct.Q4_0.gguf"))
     db_path = Path(os.environ.get("CHROMA_DB_PATH", "data/db/"))
 
-    query_module.load_resources(model_path=str(model_path), db_path=str(db_path), gpu=True)
+    query_module.load_resources(model_path=str(model_path), db_path=str(db_path), gpu=False)
 
 @app.post("/api/query", response_model=QueryResponse)
 async def api_query(request: QueryRequest):
