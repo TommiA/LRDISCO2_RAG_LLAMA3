@@ -1,3 +1,5 @@
+import argparse
+from pathlib import Path
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import chromadb
@@ -5,15 +7,14 @@ from gpt4all import Embed4All
 from langchain.embeddings import HuggingFaceEmbeddings
 from nomic import embed
 
-pdf_path = 'data/pdf/'
 
 def read_pdf_unstructured_elements(pdf_path):
     from unstructured.partition.pdf import partition_pdf
     elements = partition_pdf(
-        filename=pdf_path,
+        filename=str(pdf_path),
         # Unstructured Helpers
-        strategy="hi_res", 
-        infer_table_structure=True, 
+        strategy="hi_res",
+        infer_table_structure=True,
         model_name="yolox"
     )
     return elements
@@ -22,12 +23,10 @@ def read_pdf(pdf_path):
     loader = DirectoryLoader(pdf_path, glob="**/*.pdf", show_progress=True)
     books = loader.load()
 
-def read_pdf_unstructured_lib():
+def read_pdf_unstructured_lib(pdf_path):
     from langchain_community.document_loaders import UnstructuredPDFLoader
-    pdf_path = 'data/pdf/land_rover_rave_discovery_2_workshop_manual.pdf'
-    loader=UnstructuredPDFLoader(pdf_path, show_progress=True)
-    data = loader.load()
-    return data
+    loader = UnstructuredPDFLoader(str(pdf_path), show_progress=True)
+    return loader.load()
 
 def split_doc(data):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=0)
@@ -93,10 +92,14 @@ def embed4all_embed_and_store(client):
 client = None
 
 
-def main():
+def main(pdf_file):
     global client
 
-    data = read_pdf_unstructured_lib()
+    pdf_path = Path(pdf_file)
+    if not pdf_path.exists():
+        raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+
+    data = read_pdf_unstructured_lib(pdf_path)
     docs = split_doc(data)
     client = chromadb.PersistentClient(path="data/db/")
     store_basic_docs(docs)
@@ -104,4 +107,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Read a PDF file and store embeddings in Chroma.")
+    parser.add_argument("pdf_file", help="Path to the PDF file to process")
+    args = parser.parse_args()
+    main(args.pdf_file)
