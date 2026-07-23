@@ -102,6 +102,8 @@ The browser UI sends queries to `/api/query` and displays the generated answer p
 
 ## Build and run with Docker
 
+> Note: Docker deployments initialize the GPT4All backend with `gpu=False` to avoid GPU startup issues. This means inference runs on CPU and may be noticeably slower than a GPU-backed setup.
+
 Build the container image:
 
 ```bash
@@ -114,6 +116,11 @@ Run the web UI container:
 docker run --rm -p 8000:8000 lrdisco2-rag-llama3
 ```
 
+Run the query script directly instead of starting the web UI:
+
+```bash
+docker run --rm lrdisco2-rag-llama3 python query_chroma_db_and_llama.py -p "Tell me about the Td5 diesel engine"
+```
 Then browse to:
 
 ```text
@@ -122,3 +129,4 @@ http://localhost:8000
 
 # Wishlist:
 * Improved PDF content capturing including tables (as HTML?) and maybe even images
+
