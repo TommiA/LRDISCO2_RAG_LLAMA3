@@ -21,5 +21,6 @@ EXPOSE 8000
 # Define default database path. Model name is hardcoded in the application.
 ENV CHROMA_DB_PATH=/app/data/db/
 
-# Start the FastAPI backend and serve the frontend
-CMD ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the FastAPI backend and serve the frontend by default.
+# Removing ENTRYPOINT lets users override the command directly.
+CMD ["python", "-m", "uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]
