@@ -15,4 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag lrdisco2rag:$(date +%s)
+    - name: Save Docker image
+      run: docker save lrdisco2rag:latest -o lrdisco2rag.tar
+    
+    - name: Upload Docker image
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-image
+        path: lrdisco2rag.tar
