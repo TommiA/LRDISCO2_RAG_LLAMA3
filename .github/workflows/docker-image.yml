@@ -32,6 +32,12 @@ jobs:
        run: pip install gdown
 
      - name: Download ChromaDB contents
+       env:
+         CHROMADB_CONTENTS: ${{ secrets.CHROMADB_CONTENTS }}
+       run: |
+         gdown --folder "$CHROMADB_CONTENTS" -O chromadb_contents
+     
+     - name: Download ChromaDB contents
        run: |
          mkdir -p chromadb_contents
          gdown --folder "${{ secrets.CHROMADB_CONTENTS }}" -O chromadb_contents
