@@ -2,7 +2,7 @@ import argparse
 import os
 import chromadb
 from gpt4all import Embed4All, GPT4All
-from langchain_classic.chains import RetrievalQA
+from langchain.chains import RetrievalQA
 
 args = argparse.Namespace(prompt=None, gpu=False, debug=False, interactive=False)
 model = None
