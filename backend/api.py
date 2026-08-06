@@ -7,6 +7,15 @@ from pydantic import BaseModel
 from pathlib import Path
 import query_chroma_db_and_llama as query_module
 
+import time
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+
 app = FastAPI()
 
 app.add_middleware(
@@ -37,6 +46,7 @@ async def startup_event():
     db_path = Path(os.environ.get("CHROMA_DB_PATH", "data/db/"))
     query_module.load_resources(db_path=str(db_path), gpu=False)
 
+'''
 @app.post("/api/query", response_model=QueryResponse)
 async def api_query(request: QueryRequest):
     try:
@@ -44,4 +54,54 @@ async def api_query(request: QueryRequest):
         answer = query_module.process_query(request.prompt, context)
         return QueryResponse(answer=answer, context=context)
     except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+'''
+
+@app.post("/api/query", response_model=QueryResponse)
+async def api_query(request: QueryRequest):
+    start_time = time.time()
+
+    logger.info("QUERY START: prompt length=%d debug=%s",
+                len(request.prompt),
+                request.debug)
+
+    try:
+        step_start = time.time()
+
+        logger.info("Starting context retrieval")
+        context = query_module.query_collection(
+            request.prompt,
+            debug=request.debug
+        )
+
+        logger.info(
+            "Context retrieval completed in %.2f seconds",
+            time.time() - step_start
+        )
+
+        step_start = time.time()
+
+        logger.info("Starting answer generation")
+        answer = query_module.process_query(
+            request.prompt,
+            context
+        )
+
+        logger.info(
+            "Answer generation completed in %.2f seconds",
+            time.time() - step_start
+        )
+
+        logger.info(
+            "QUERY COMPLETE in %.2f seconds",
+            time.time() - start_time
+        )
+
+        return QueryResponse(answer=answer, context=context)
+
+    except Exception as exc:
+        logger.exception(
+            "QUERY FAILED after %.2f seconds",
+            time.time() - start_time
+        )
         raise HTTPException(status_code=500, detail=str(exc))
