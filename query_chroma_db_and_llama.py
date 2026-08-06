@@ -2,7 +2,7 @@ import argparse
 import os
 import chromadb
 from gpt4all import Embed4All, GPT4All
-from langchain.chains import RetrievalQA
+from langchain_classic.chains import RetrievalQA
 
 args = argparse.Namespace(prompt=None, gpu=False, debug=False, interactive=False)
 model = None
@@ -53,7 +53,15 @@ def load_resources(model_path=None, db_path=None, gpu=False):
     model = GPT4All(model_name, device=device)
     client = chromadb.PersistentClient(path=db_path)
     embedder = Embed4All()
-    collection = client.get_collection("LR_Disco_2_embed4all")
+    collections = client.list_collections()
+    if len(collections) > 0:
+        for _c in collections:
+            if "LR_Disco_2_embed4all" in _c.name:
+                collection = client.get_collection("LR_Disco_2_embed4all")
+        if not collection:
+            print("DEBUG: No LR_Disco_2_embed4all collection found in ChromaDB!")
+    else:
+        print("DEBUG: ChromaDB has no collections!")
 
 
 def main(argv=None):

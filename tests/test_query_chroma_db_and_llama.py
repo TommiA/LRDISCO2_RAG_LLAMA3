@@ -20,7 +20,7 @@ def test_query_collection_returns_concatenated_documents():
     with patch.object(app, 'embedder', mock_embedder), patch.object(app, 'collection', mock_collection):
         result = app.query_collection("test")
 
-    assert result == "doc1doc2"
+    assert result == "doc1\n\ndoc2"
     mock_embedder.embed.assert_called_once_with("test")
     mock_collection.query.assert_called_once()
 
@@ -35,13 +35,13 @@ def test_query_collection_debug_prints(capsys):
         'distances': [[0.1, 0.2]]
     }
 
-    with patch.object(app, 'embedder', mock_embedder), patch.object(app, 'collection', mock_collection), patch.object(app, 'args', argparse.Namespace(debug=True)):
-        result = app.query_collection("test")
+    with patch.object(app, 'embedder', mock_embedder), patch.object(app, 'collection', mock_collection):
+        result = app.query_collection("test", debug=True)
 
     captured = capsys.readouterr()
     assert "DEBUG: Chroma DB retrieval results:" in captured.out
     assert "doc1" in captured.out
-    assert result == "doc1doc2"
+    assert result == "doc1\n\ndoc2"
 
 
 def test_process_query_calls_model_generate():

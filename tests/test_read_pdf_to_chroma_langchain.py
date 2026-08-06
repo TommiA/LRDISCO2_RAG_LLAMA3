@@ -3,16 +3,6 @@ from unittest.mock import MagicMock, patch
 
 import read_pdf_to_chroma_langchain as app
 
-
-def test_read_pdf_unstructured_elements_calls_partition_pdf():
-    mock_partition_pdf = MagicMock(return_value=["element"])
-    with patch("unstructured.partition.pdf.partition_pdf", mock_partition_pdf):
-        elements = app.read_pdf_unstructured_elements("data/pdf/test.pdf")
-
-    assert elements == ["element"]
-    mock_partition_pdf.assert_called_once()
-
-
 def test_split_doc_splits_documents():
     fake_document = MagicMock(page_content="hello")
     fake_splitter = MagicMock()

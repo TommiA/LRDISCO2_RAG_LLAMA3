@@ -4,6 +4,8 @@ langchain==0.2.11
 langchain-community==0.2.10
 langchain-text-splitters==0.2.2
 nomic==3.1.1
-unstructured==0.15.0
+unstructured[pdf]==0.15.0
+pdfminer.six<20240706
+numpy==1.26.4
 fastapi==0.139.2
 uvicorn==0.23.2
