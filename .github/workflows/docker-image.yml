@@ -28,6 +28,14 @@ jobs:
     - name: Run tests
       run: python -m pytest
 
+     - name: Install gdown
+       run: pip install gdown
+
+     - name: Download ChromaDB contents
+       run: |
+         mkdir -p chromadb_contents
+         gdown --folder "${{ secrets.CHROMADB_CONTENTS }}" -O chromadb_contents
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag lrdisco2rag:latest
 
