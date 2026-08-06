@@ -20,7 +20,7 @@ EXPOSE 8000
 
 # Define default database path. Model name is hardcoded in the application.
 ENV CHROMA_DB_PATH=/app/data/db/
-COPY chromadb_contents ${CHROMA_DB_PATH}
+COPY chromadb_contents /app/data/
 
 # Start the FastAPI backend and serve the frontend by default.
 # Removing ENTRYPOINT lets users override the command directly.
