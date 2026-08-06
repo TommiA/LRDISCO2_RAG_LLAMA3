@@ -58,10 +58,8 @@ def load_resources(model_path=None, db_path=None, gpu=False):
         for _c in collections:
             if "LR_Disco_2_embed4all" in _c.name:
                 collection = client.get_collection("LR_Disco_2_embed4all")
-        if not collection:
-            print("DEBUG: No LR_Disco_2_embed4all collection found in ChromaDB!")
-    else:
-        print("DEBUG: ChromaDB has no collections!")
+    if collection is None:
+        print("DEBUG: No LR_Disco_2_embed4all collection found in ChromaDB!")
 
 
 def main(argv=None):
