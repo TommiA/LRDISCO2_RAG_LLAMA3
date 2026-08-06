@@ -60,13 +60,14 @@ jobs:
 
       - name: Install gdown
         run: pip install gdown
-
+       
       - name: Download ChromaDB contents
         env:
           CHROMADB_CONTENTS: ${{ secrets.CHROMADB_CONTENTS }}
         run: |
           mkdir -p chromadb_contents
           gdown --folder "$CHROMADB_CONTENTS" -O chromadb_contents
+          find chromadb_contents -maxdepth 2 -type f | head -20
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
