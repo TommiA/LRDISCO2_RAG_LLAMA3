@@ -69,9 +69,16 @@ jobs:
           gdown --folder "$CHROMADB_CONTENTS" -O chromadb_contents
           find chromadb_contents -maxdepth 2 -type f | head -20
 
+      - name: Verify ChromaDB exists
+        run: |
+          pwd
+          ls -la
+          find chromadb_contents -type f -ls
+
       - name: Build and push container image to registry
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
+          context: .
           push: true
           tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
           file: ./Dockerfile
